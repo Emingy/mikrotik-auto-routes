@@ -1,0 +1,18 @@
+:local addresses {
+  "104.16.0.0/12";
+  "172.64.0.0/13";
+  "188.114.96.0/22"
+}
+:local comment "nnmclub"
+:local list "mark_list"
+
+
+:foreach addr in=$addresses do={
+    :do {
+        /ip firewall address-list remove [find address=$addr]
+
+        /ip firewall address-list add address=$addr list=$list comment=$comment
+    } on-error={
+        :log warning "error on add $comment address $addr"
+    }
+}
